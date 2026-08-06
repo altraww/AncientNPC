@@ -2,6 +2,7 @@ require('dotenv').config();
 const { Client, GatewayIntentBits, REST, Routes, SlashCommandBuilder } = require('discord.js');
 const { GoogleGenAI } = require('@google/genai');
 const wisdomQuotes = require('./wisdom');
+const ANCIENTNPC_SYSTEM_PROMPT = require('./prompts/ancientnpc');
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
@@ -80,6 +81,9 @@ client.on('interactionCreate', async (interaction) => {
       const response = await ai.models.generateContent({
         model: 'gemini-3.5-flash',
         contents: question,
+        config: {
+          systemInstruction: ANCIENTNPC_SYSTEM_PROMPT,
+        },
       });
       await interaction.editReply(response.text ?? 'The scrolls returned no answer.');
     } catch (error) {

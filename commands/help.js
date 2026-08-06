@@ -8,8 +8,9 @@ module.exports = {
     const embed = new EmbedBuilder()
       .setColor(0xd4af37)
       .setTitle('📜 AncientNPC Command Scroll')
+      .setThumbnail(interaction.client.user.displayAvatarURL())
       .setDescription(
-        '*"Welcome, traveler. These ancient tablets describe the powers granted to AncientNPC."*',
+        'Welcome, traveler.\nThese ancient tablets record every power entrusted to AncientNPC.\nChoose your path wisely.',
       )
       .addFields(
         { name: '🤖 AI', value: '• /ask — Ask AncientNPC anything.' },
@@ -20,7 +21,7 @@ module.exports = {
         },
         { name: '⚡ Utility', value: '• /ping — Check if AncientNPC is awake.' },
       )
-      .setFooter({ text: 'More relics are uncovered with every update...' })
+      .setFooter({ text: 'AncientNPC • A forgotten guardian from the Bronze Age\nVersion 1.0' })
       .setTimestamp();
     await interaction.reply({ embeds: [embed] });
   },

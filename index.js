@@ -1,5 +1,6 @@
 require('dotenv').config();
 const { Client, GatewayIntentBits, REST, Routes, SlashCommandBuilder } = require('discord.js');
+const wisdomQuotes = require('./wisdom');
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
@@ -7,6 +8,9 @@ const commands = [
   new SlashCommandBuilder()
     .setName('ping')
     .setDescription('Replies with Pong! and the bot latency in milliseconds.'),
+  new SlashCommandBuilder()
+    .setName('wisdom')
+    .setDescription('Receive one random piece of ancient wisdom.'),
 ];
 
 client.once('clientReady', async () => {
@@ -46,6 +50,11 @@ client.on('interactionCreate', async (interaction) => {
 
   if (interaction.commandName === 'ping') {
     await interaction.reply(`🏓 Pong! ${client.ws.ping}ms`);
+  }
+
+  if (interaction.commandName === 'wisdom') {
+    const quote = wisdomQuotes[Math.floor(Math.random() * wisdomQuotes.length)];
+    await interaction.reply(quote);
   }
 });
 

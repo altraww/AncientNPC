@@ -78,12 +78,13 @@ client.on('interactionCreate', async (interaction) => {
     await interaction.deferReply();
     try {
       const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
+        model: 'gemini-3.5-flash',
         contents: question,
       });
       await interaction.editReply(response.text ?? 'The scrolls returned no answer.');
     } catch (error) {
-      console.error('Gemini request failed:', error);
+      console.error('Gemini request failed:', error.message);
+      console.error('Gemini error details:', JSON.stringify(error, null, 2));
       await interaction.editReply('The scrolls have gone silent. Try again later.');
     }
   }

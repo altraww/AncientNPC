@@ -10,9 +10,28 @@ const commands = [
 ];
 
 client.once('clientReady', async () => {
+  const { TOKEN, CLIENT_ID, GUILD_ID } = process.env;
+
+  console.log('TOKEN:', TOKEN ? 'set' : 'undefined');
+  console.log('CLIENT_ID:', CLIENT_ID);
+  console.log('GUILD_ID:', GUILD_ID);
+
+  if (!TOKEN) {
+    console.error('TOKEN is not defined. Set it as a Railway service variable.');
+    process.exit(1);
+  }
+  if (!CLIENT_ID) {
+    console.error('CLIENT_ID is not defined. Set it as a Railway service variable.');
+    process.exit(1);
+  }
+  if (!GUILD_ID) {
+    console.error('GUILD_ID is not defined. Set it as a Railway service variable.');
+    process.exit(1);
+  }
+
   try {
-    const rest = new REST().setToken(process.env.TOKEN);
-    await rest.put(Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILD_ID), {
+    const rest = new REST().setToken(TOKEN);
+    await rest.put(Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID), {
       body: commands.map((command) => command.toJSON()),
     });
     console.log('Slash commands registered.');

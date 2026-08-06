@@ -3,6 +3,8 @@ const { Client, GatewayIntentBits, REST, Routes, SlashCommandBuilder } = require
 const { GoogleGenAI } = require('@google/genai');
 const wisdomQuotes = require('./wisdom');
 const ANCIENTNPC_SYSTEM_PROMPT = require('./prompts/ancientnpc');
+const curseCommand = require('./commands/curse');
+const blessingCommand = require('./commands/blessing');
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
@@ -23,6 +25,8 @@ const commands = [
         .setDescription('The question to ask Gemini.')
         .setRequired(true),
     ),
+  curseCommand.data,
+  blessingCommand.data,
 ];
 
 client.once('clientReady', async () => {
@@ -91,6 +95,14 @@ client.on('interactionCreate', async (interaction) => {
       console.error('Gemini error details:', JSON.stringify(error, null, 2));
       await interaction.editReply('The scrolls have gone silent. Try again later.');
     }
+  }
+
+  if (interaction.commandName === 'curse') {
+    await curseCommand.execute(interaction);
+  }
+
+  if (interaction.commandName === 'blessing') {
+    await blessingCommand.execute(interaction);
   }
 });
 

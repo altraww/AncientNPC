@@ -5,6 +5,7 @@ const wisdomQuotes = require('./wisdom');
 const ANCIENTNPC_SYSTEM_PROMPT = require('./prompts/ancientnpc');
 const curseCommand = require('./commands/curse');
 const blessingCommand = require('./commands/blessing');
+const helpCommand = require('./commands/help');
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
@@ -27,6 +28,7 @@ const commands = [
     ),
   curseCommand.data,
   blessingCommand.data,
+  helpCommand.data,
 ];
 
 client.once('clientReady', async () => {
@@ -103,6 +105,10 @@ client.on('interactionCreate', async (interaction) => {
 
   if (interaction.commandName === 'blessing') {
     await blessingCommand.execute(interaction);
+  }
+
+  if (interaction.commandName === 'help') {
+    await helpCommand.execute(interaction);
   }
 });
 

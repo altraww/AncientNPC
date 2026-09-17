@@ -47,10 +47,6 @@ client.once('clientReady', async () => {
     console.error('CLIENT_ID is not defined. Set it as a Railway service variable.');
     process.exit(1);
   }
-  if (!GUILD_ID) {
-    console.error('GUILD_ID is not defined. Set it as a Railway service variable.');
-    process.exit(1);
-  }
   if (!GEMINI_API_KEY) {
     console.error('GEMINI_API_KEY is not defined. Set it as a Railway service variable.');
     process.exit(1);
@@ -58,10 +54,15 @@ client.once('clientReady', async () => {
 
   try {
     const rest = new REST().setToken(TOKEN);
-    await rest.put(Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID), {
+
+    if (GUILD_ID) {
+      await rest.put(Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID), { body: [] });
+    }
+
+    await rest.put(Routes.applicationCommands(CLIENT_ID), {
       body: commands.map((command) => command.toJSON()),
     });
-    console.log('Slash commands registered.');
+    console.log('Slash commands registered globally.');
   } catch (error) {
     console.error('Failed to register slash commands:', error);
   }
